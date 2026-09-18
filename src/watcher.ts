@@ -84,6 +84,7 @@ export class CheckboxWatcher {
 
   async syncRemoteCompletions(tasks: FlowTask[]): Promise<void> {
     const states = new Map(tasks.map((task) => [task.id, task.status === "done"]));
+    // Required to find linked checkboxes in any note when completion changes in SP.
     for (const file of this.app.vault.getMarkdownFiles()) {
       const original = await this.app.vault.read(file);
       const lines = original.split("\n");

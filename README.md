@@ -97,7 +97,7 @@ Copy `main.js`, `manifest.json`, and `styles.css` into the plugin directory desc
 4. Click **Test connection**.
 5. Confirm that the status in the FlowTask panel changes to **connected**.
 
-Recent Super Productivity versions may not require a token for local loopback requests. FlowTask does not send an empty `Authorization` header. When a token is configured, it sends `Authorization: Bearer <token>` on authenticated requests.
+Recent Super Productivity versions may not require a token for local loopback requests. Leave the field empty in that case. FlowTask never sends an empty `Authorization` header. When a token is configured, FlowTask sends `Authorization: Bearer <token>` on authenticated task, project, tag, and task-control requests. The `GET /health` check is always sent without an authorization header.
 
 ## Import tasks from notes
 
@@ -305,7 +305,7 @@ The Super Productivity Local REST API URL. Default: `http://127.0.0.1:3876`.
 
 ### Access token
 
-Optional. Leave empty for local SP versions that do not require a token. When configured, the token is sent as a Bearer token on authenticated requests.
+Optional. Leave empty when your local SP API does not require authentication. If your SP version displays or requires a token, enter it here. FlowTask sends `Authorization: Bearer <token>` on authenticated task, project, tag, and task-control requests; `GET /health` is always unauthenticated.
 
 ### Refresh interval
 

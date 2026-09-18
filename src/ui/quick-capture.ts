@@ -92,7 +92,7 @@ export class QuickCaptureModal extends Modal {
     if (!this.input.value.trim()) { this.preview.setText("Enter a task. Use +project, #tag, @date and a duration."); return; }
     this.preview.createEl("strong", { text: parsed.title || "Untitled task" });
     const details = [parsed.projectName && `Project: ${parsed.projectName}`, parsed.tagNames.length && `Tags: ${parsed.tagNames.join(", ")}`, parsed.dueDate && `Date: ${parsed.dueDate}`, parsed.estimateMinutes && `Estimate: ${parsed.estimateMinutes}min`].filter(Boolean).join(" · ");
-    this.preview.createEl("div", { text: details || "No additional metadata" });
+    this.preview.createDiv({ text: details || "No additional metadata" });
   }
 
   private async submit(): Promise<void> {

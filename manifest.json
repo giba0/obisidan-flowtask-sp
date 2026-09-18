@@ -1,8 +1,8 @@
 {
   "id": "flowtask-super-productivity",
   "name": "FlowTask For Super Productivity",
-  "version": "0.1.1",
-  "minAppVersion": "1.7.2",
+  "version": "0.1.2",
+  "minAppVersion": "1.13.0",
   "description": "Capture, sync and complete Super Productivity tasks without leaving your notes.",
   "author": "Gilberto Olimpio Jr.",
   "authorUrl": "https://github.com/giba0",

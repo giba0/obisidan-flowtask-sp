@@ -6,6 +6,14 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.2
+
+- Removed the plugin name from the Settings heading.
+- Added declarative Settings definitions for Settings search.
+- Removed direct DOM style injection and inline style assignments.
+- Updated the minimum supported Obsidian version to 1.13.0.
+- Replaced direct DOM creation in Quick Capture with Obsidian helpers.
+
 ## 0.1.1
 
 - Fixed Obsidian review compatibility issues.
