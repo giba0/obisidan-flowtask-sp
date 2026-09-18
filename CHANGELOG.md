@@ -6,6 +6,11 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.5
+
+- Reduced Quick Capture autocomplete width and height.
+- Anchored suggestions to the input with compact Obsidian-style menu rows.
+
 ## 0.1.4
 
 - Translated remaining user-facing UI strings to English.
