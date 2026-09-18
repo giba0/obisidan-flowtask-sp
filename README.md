@@ -48,7 +48,7 @@ The integration is deliberately local-first. The primary transport is the Super 
 
 ## Requirements
 
-- Obsidian Desktop 1.5.0 or later.
+- Obsidian Desktop 1.13.0 or later.
 - Super Productivity with the Local REST API enabled.
 - A local Super Productivity API URL, normally `http://127.0.0.1:3876`.
 - A token only when the installed Super Productivity version displays and requires one.
@@ -98,6 +98,12 @@ Copy `main.js`, `manifest.json`, and `styles.css` into the plugin directory desc
 5. Confirm that the status in the FlowTask panel changes to **connected**.
 
 Recent Super Productivity versions may not require a token for local loopback requests. Leave the field empty in that case. FlowTask never sends an empty `Authorization` header. When a token is configured, FlowTask sends `Authorization: Bearer <token>` on authenticated task, project, tag, and task-control requests. The `GET /health` check is always sent without an authorization header.
+
+<p align="center">
+  <img src="assets/screenshots/settings.png" alt="FlowTask settings" width="760" />
+  <br />
+  <em>FlowTask connection, fallback, and import settings.</em>
+</p>
 
 ## Import tasks from notes
 
@@ -150,6 +156,12 @@ The marker is hidden in Live Preview and Reading View and remains visible in Sou
 - Reopening the task in Super Productivity unchecks the linked note checkbox.
 - Remote completion synchronization runs during polling even when the FlowTask panel is closed.
 
+<p align="center">
+  <img src="assets/screenshots/side-by-side.png" alt="Obsidian and FlowTask side by side" width="900" />
+  <br />
+  <em>Write in Obsidian while monitoring the linked FlowTask panel.</em>
+</p>
+
 ## Obsidian Tasks compatibility
 
 FlowTask is compatible with the common Obsidian Tasks format:
@@ -183,11 +195,23 @@ The modal provides:
 - A live preview showing the resolved date and estimate.
 - An option to attach an `obsidian://` link to the current note.
 
+<p align="center">
+  <img src="assets/screenshots/quick-capture.png" alt="FlowTask Quick Capture" width="760" />
+  <br />
+  <em>Quick Capture with a live project, date, and estimate preview.</em>
+</p>
+
 Quick capture uses `#tag` because it is an isolated modal. Note import uses the configured routing tag and remains compatible with normal Obsidian note syntax.
 
 ## Task panel
 
 Open the panel with the ribbon icon, the Command Palette, or **FlowTask: Open panel**.
+
+<p align="center">
+  <img src="assets/screenshots/task-panel.png" alt="FlowTask task panel" width="760" />
+  <br />
+  <em>Search, filter, group, and track tasks from the sidebar.</em>
+</p>
 
 ### Views
 
@@ -252,6 +276,18 @@ Time values are read in the millisecond format used by Super Productivity and di
 
 Starting a task does not guarantee starting a Pomodoro or focus session. Super Productivity does not expose a guaranteed external focus-session API; focus behavior depends on the application's own configuration.
 
+<p align="center">
+  <img src="assets/screenshots/super-productivity-inbox.png" alt="Super Productivity Inbox" width="900" />
+  <br />
+  <em>The linked task in Super Productivity's Inbox.</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/super-productivity-project.png" alt="Super Productivity project view" width="900" />
+  <br />
+  <em>Tracking and scheduling the task inside a Super Productivity project.</em>
+</p>
+
 ## Command Palette commands
 
 FlowTask registers independent commands so each can receive its own Obsidian hotkey:
@@ -263,6 +299,12 @@ FlowTask registers independent commands so each can receive its own Obsidian hot
 - **FlowTask For Super Productivity: View today's tasks**
 
 Configure hotkeys under **Settings > Hotkeys**.
+
+<p align="center">
+  <img src="assets/screenshots/command-palette.png" alt="FlowTask Command Palette commands" width="760" />
+  <br />
+  <em>FlowTask commands are independently available in the Obsidian Command Palette.</em>
+</p>
 
 ## Connection and fallback
 
@@ -472,24 +514,6 @@ Describe the user problem before proposing the implementation. Include:
 Pull requests should not include secrets, vault data, `node_modules`, or unrelated formatting changes. A maintainer may request changes before merging.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development and review policy.
-
-## Release process
-
-Maintainers should:
-
-1. Update the version in `manifest.json` and `package.json`.
-2. Run the typecheck, test suite, and production build.
-3. Confirm that `main.js`, `manifest.json`, and `styles.css` are at the repository root.
-4. Review the README and changelog.
-5. Create a Git tag matching the manifest version, for example `0.1.0`.
-6. Create a GitHub release containing `main.js`, `manifest.json`, and `styles.css`.
-7. Submit the plugin through the official Obsidian community plugin submission process.
-
-Official Obsidian submission documentation:
-
-<https://docs.obsidian.md/plugins/releasing/submit-plugin>
-
-The submission metadata must match the released `manifest.json`. The repository must be public, the plugin must have stable root-level `main.js`, `manifest.json`, and `styles.css` files, and the release version must match the manifest version.
 
 ## Privacy and security
 

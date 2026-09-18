@@ -25,7 +25,7 @@ export class CheckboxWatcher {
   async syncCurrentLine(): Promise<void> {
     const editor = this.app.workspace.activeEditor?.editor;
     const file = this.app.workspace.getActiveFile();
-    if (!editor || !file) { new Notice("Abra uma nota para sincronizar a linha atual."); return; }
+    if (!editor || !file) { new Notice("Open a note to sync the current line."); return; }
     await this.processLine(file, editor.getLine(editor.getCursor().line), editor.getCursor().line);
   }
 

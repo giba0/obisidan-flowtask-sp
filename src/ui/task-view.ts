@@ -184,7 +184,7 @@ export class TaskView extends ItemView {
     }
     titleRow.createDiv({ cls: "flowtask-title", text: task.title });
     const meta = body.createDiv({ cls: "flowtask-meta" });
-    if (task.timeSpentMs > 0) meta.createSpan({ cls: "flowtask-badge is-invested", text: `↻ ${formatDuration(task.timeSpentMs)} investidas` });
+    if (task.timeSpentMs > 0) meta.createSpan({ cls: "flowtask-badge is-invested", text: `↻ ${formatDuration(task.timeSpentMs)} invested` });
     else if (task.estimateMinutes) meta.createSpan({ cls: "flowtask-badge", text: `~${formatDuration(task.estimateMinutes * 60 * 1000)}` });
     if (task.dueDate) meta.createSpan({ cls: "flowtask-badge", text: task.dueDate });
     (task.tagNames ?? []).forEach((tag) => meta.createSpan({ cls: "flowtask-badge", text: `#${tag}` }));
@@ -193,7 +193,7 @@ export class TaskView extends ItemView {
     const startLabel = isCurrent ? "■ Pause" : task.timeSpentMs > 0 ? `↻ Resume (${formatDuration(task.timeSpentMs)})` : "▶ Start";
     const start = actions.createEl("button", { cls: "flowtask-start-button", text: startLabel, attr: { "aria-label": startLabel } });
     start.addEventListener("click", () => void (isCurrent ? this.pause() : this.start(task)));
-    const trash = actions.createEl("button", { cls: "flowtask-icon-button", attr: { "aria-label": "Excluir" } });
+    const trash = actions.createEl("button", { cls: "flowtask-icon-button", attr: { "aria-label": "Delete" } });
     setIcon(trash, "trash-2"); trash.addEventListener("click", () => void this.remove(task));
   }
 
