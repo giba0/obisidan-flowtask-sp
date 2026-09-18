@@ -1,0 +1,28 @@
+{
+  "name": "flowtask-for-super-productivity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Obsidian bridge for Super Productivity",
+  "main": "main.js",
+  "repository": "https://github.com/giba0/obisidan-flowtask-sp",
+  "homepage": "https://github.com/giba0/obisidan-flowtask-sp",
+  "bugs": { "url": "https://github.com/giba0/obisidan-flowtask-sp/issues" },
+  "funding": { "type": "individual", "url": "https://www.buymeacoffee.com/giba" },
+  "scripts": {
+    "build": "node build.mjs production",
+    "dev": "node build.mjs development",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "version:patch": "node scripts/version.mjs patch",
+    "version:minor": "node scripts/version.mjs minor",
+    "version:major": "node scripts/version.mjs major"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.24.2",
+    "obsidian": "^1.7.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

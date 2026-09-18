@@ -1,0 +1,11 @@
+{
+  "id": "flowtask-super-productivity",
+  "name": "FlowTask For Super Productivity",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Capture, sync and complete Super Productivity tasks without leaving Obsidian.",
+  "author": "Gilberto Olimpio Jr.",
+  "authorUrl": "https://github.com/giba0",
+  "fundingUrl": "https://www.buymeacoffee.com/giba",
+  "isDesktopOnly": true
+}

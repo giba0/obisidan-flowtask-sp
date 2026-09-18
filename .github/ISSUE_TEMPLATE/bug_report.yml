@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a reproducible problem with FlowTask.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove private note content, task data, and access tokens before submitting.
+  - type: input
+    id: flowtask-version
+    attributes:
+      label: FlowTask version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian version
+    validations:
+      required: true
+  - type: input
+    id: super-productivity-version
+    attributes:
+      label: Super Productivity version
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest safe example that reproduces the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

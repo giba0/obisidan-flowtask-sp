@@ -1,0 +1,8 @@
+node_modules/
+.kilo/
+.DS_Store
+*.log
+.env
+.env.*
+coverage/
+dist/
