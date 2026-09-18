@@ -6,6 +6,12 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.4
+
+- Translated remaining user-facing UI strings to English.
+- Added documentation screenshots for setup, Quick Capture, the panel, and integration workflows.
+- Updated the README requirements and usage examples.
+
 ## 0.1.3
 
 - Removed the deprecated imperative Settings `display()` implementation.
