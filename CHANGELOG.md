@@ -4,7 +4,15 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 ## Unreleased
 
-- Documentation and open-source project setup.
+- Future changes.
+
+## 0.1.1
+
+- Fixed Obsidian review compatibility issues.
+- Moved plugin styles to the standard root-level `styles.css` file.
+- Added release asset attestations for future GitHub releases.
+- Added the FlowTask logo and expanded open-source documentation.
+- Improved legacy marker migration and release metadata validation.
 
 ## 0.1.0
 

@@ -7,8 +7,6 @@ import { FLOWTASK_VIEW_TYPE, TaskView } from "./ui/task-view";
 import { FlowTaskSettingTab } from "./settings";
 import { COMMAND_NAMES } from "./commands";
 
-declare const __FLOWTASK_CSS__: string;
-
 export default class FlowTaskPlugin extends Plugin {
   override settings!: BridgeSettings;
   transport!: TransportManager;
@@ -34,10 +32,9 @@ export default class FlowTaskPlugin extends Plugin {
     this.restartPolling();
     this.registerEvent(this.app.workspace.on("active-leaf-change", () => { void this.refreshPanel(); }));
     this.registerDomEvent(window, "focus", () => { void this.refreshPanel(); });
-    this.addStyle();
   }
 
-  override onunload(): void { this.app.workspace.detachLeavesOfType(FLOWTASK_VIEW_TYPE); }
+  override onunload(): void {}
 
   async saveSettings(): Promise<void> { await this.saveData(this.settings); this.transport.configure(); this.watcher?.configure(this.settings.importTag); }
 
@@ -73,11 +70,4 @@ export default class FlowTaskPlugin extends Plugin {
 
   private async refreshWithNotice(): Promise<void> { await this.refreshPanel(); new Notice(this.transport.state === "connected" ? "FlowTask refreshed." : "FlowTask refreshed in offline mode."); }
 
-  private addStyle(): void {
-    const style = document.createElement("style");
-    style.id = "flowtask-styles";
-    style.textContent = __FLOWTASK_CSS__;
-    document.head.appendChild(style);
-    this.register(() => style.remove());
-  }
 }

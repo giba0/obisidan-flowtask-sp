@@ -116,7 +116,7 @@ export class TaskView extends ItemView {
     this.orderedGroups(groups).forEach(([groupName, groupTasks]) => {
       const group = this.listEl.createDiv({ cls: "flowtask-group" });
       const groupHeader = group.createEl("button", { cls: "flowtask-group-title", attr: { "aria-expanded": String(!this.collapsedGroups.has(groupName)) } });
-      const dragHandle = groupHeader.createSpan({ cls: "flowtask-project-drag-handle", text: "⋮⋮", attr: { title: "Drag to reorder projects" } });
+      groupHeader.createSpan({ cls: "flowtask-project-drag-handle", text: "⋮⋮", attr: { title: "Drag to reorder projects" } });
       groupHeader.createSpan({ cls: "flowtask-collapse-icon", text: this.collapsedGroups.has(groupName) ? "▸" : "▾" });
       groupHeader.createSpan({ text: groupName });
       groupHeader.draggable = true;
@@ -170,7 +170,7 @@ export class TaskView extends ItemView {
 
   private renderTask(parent: HTMLElement, task: FlowTask, depth = 0, hasChildren = false): void {
     const card = parent.createDiv({ cls: "flowtask-card" });
-    card.style.setProperty("--flowtask-indent", `${depth * 16}px`);
+    card.setCssProps({ "--flowtask-indent": `${depth * 16}px` });
     const check = card.createEl("input", { type: "checkbox" });
     check.addClass("flowtask-check"); check.checked = task.status === "done";
     check.addEventListener("change", () => void this.complete(task, check.checked));

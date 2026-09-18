@@ -20,9 +20,10 @@ export function parseTaskText(text: string, context: DateContext = {}): ParsedTa
     title = title.replace(tasksDate[0], " ");
   }
 
-  title = title.replace(TOKEN_RE, (token, project, percentTag, hashTag, date, amount, unit) => {
+  title = title.replace(TOKEN_RE, (_token: string, project?: string, percentTag?: string, hashTag?: string, date?: string, amount?: string, unit?: string) => {
     if (project) projectName = project;
-    if (percentTag || hashTag) tagNames.push(percentTag || hashTag);
+    const tag = percentTag ?? hashTag;
+    if (tag) tagNames.push(tag);
     if (date) dueDate = resolveDateToken(date, context);
     if (amount) {
       const numeric = Number(amount);

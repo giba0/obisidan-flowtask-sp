@@ -1,7 +1,6 @@
 import { Modal, Notice, Setting, type App } from "obsidian";
 import { applySuggestion, getSuggestions, type Suggestion } from "../domain/autocomplete";
 import { parseTaskText } from "../domain/parser";
-import { resolveDateToken } from "../domain/date";
 import type { ProjectRef, TagRef } from "../types";
 import { TransportManager } from "../transport/manager";
 
@@ -24,9 +23,6 @@ export class QuickCaptureModal extends Modal {
     content.empty();
     this.input = content.createEl("input", { type: "text", placeholder: "Buy milk +Home #shopping @today 15m" });
     this.input.addClass("flowtask-capture-input");
-    this.input.style.width = "100%";
-    this.input.style.fontSize = "16px";
-    this.input.style.padding = "10px";
     this.autocompleteEl = content.createDiv({ cls: "flowtask-autocomplete" });
     this.preview = content.createDiv({ cls: "flowtask-preview" });
     this.updatePreview();
@@ -40,7 +36,7 @@ export class QuickCaptureModal extends Modal {
     cancel.addEventListener("click", () => this.close());
     const submit = actions.createEl("button", { text: "Create task", cls: "mod-cta" });
     submit.addEventListener("click", () => void this.submit());
-    this.loadReferences();
+    void this.loadReferences().catch(() => this.hideAutocomplete());
     window.setTimeout(() => this.input.focus(), 20);
   }
 

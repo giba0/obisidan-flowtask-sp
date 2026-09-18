@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/flowtask-logo.png" alt="FlowTask For Super Productivity" width="800" />
+</p>
+
 # FlowTask For Super Productivity
 
 <p align="center">
@@ -64,7 +68,7 @@ After FlowTask is accepted into the Obsidian community plugin directory:
 
 ### Manual installation
 
-Download `main.js` and `manifest.json` from a GitHub release and copy them into:
+Download `main.js`, `manifest.json`, and `styles.css` from a GitHub release and copy them into:
 
 ```text
 <vault>/.obsidian/plugins/flowtask-super-productivity/
@@ -83,7 +87,7 @@ npm install
 npm run build
 ```
 
-Copy `main.js` and `manifest.json` into the plugin directory described above. Rebuild after source changes and reload the plugin in Obsidian.
+Copy `main.js`, `manifest.json`, and `styles.css` into the plugin directory described above. Rebuild after source changes and reload the plugin in Obsidian.
 
 ## First-time setup
 
@@ -475,17 +479,17 @@ Maintainers should:
 
 1. Update the version in `manifest.json` and `package.json`.
 2. Run the typecheck, test suite, and production build.
-3. Confirm that `main.js` and `manifest.json` are at the repository root.
+3. Confirm that `main.js`, `manifest.json`, and `styles.css` are at the repository root.
 4. Review the README and changelog.
 5. Create a Git tag matching the manifest version, for example `0.1.0`.
-6. Create a GitHub release containing `main.js` and `manifest.json`.
+6. Create a GitHub release containing `main.js`, `manifest.json`, and `styles.css`.
 7. Submit the plugin through the official Obsidian community plugin submission process.
 
 Official Obsidian submission documentation:
 
 <https://docs.obsidian.md/plugins/releasing/submit-plugin>
 
-The submission metadata must match the released `manifest.json`. The repository must be public, the plugin must have a stable root-level `main.js` and `manifest.json`, and the release version must match the manifest version.
+The submission metadata must match the released `manifest.json`. The repository must be public, the plugin must have stable root-level `main.js`, `manifest.json`, and `styles.css` files, and the release version must match the manifest version.
 
 ## Privacy and security
 

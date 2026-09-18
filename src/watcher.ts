@@ -7,7 +7,7 @@ const MARKER_RE = /(?:<!--\s*sp-id:|%%\s*sp-id:)([\w-]+)(?:\s*-->|%%)/i;
 const LEGACY_MARKER_RE = /<!--\s*sp-id:([\w-]+)\s*-->/i;
 
 export class CheckboxWatcher {
-  private readonly timers = new Map<string, ReturnType<typeof setTimeout>>();
+  private readonly timers = new Map<string, number>();
   private readonly processing = new Set<string>();
   private readonly syncedStates = new Map<string, boolean>();
 
@@ -31,8 +31,8 @@ export class CheckboxWatcher {
 
   private schedule(file: TFile): void {
     const previous = this.timers.get(file.path);
-    if (previous) clearTimeout(previous);
-    this.timers.set(file.path, setTimeout(() => { void this.scanFile(file); }, 450));
+    if (previous) window.clearTimeout(previous);
+    this.timers.set(file.path, window.setTimeout(() => { void this.scanFile(file); }, 450));
   }
 
   private async scanFile(file: TFile): Promise<void> {

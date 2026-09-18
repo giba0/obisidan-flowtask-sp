@@ -1,8 +1,7 @@
 import esbuild from "esbuild";
-import { readFile } from "node:fs/promises";
+import { copyFile } from "node:fs/promises";
 
 const production = process.argv[2] === "production";
-const css = await readFile("src/styles.css", "utf8");
 
 await esbuild.build({
   entryPoints: ["src/main.ts"],
@@ -14,5 +13,6 @@ await esbuild.build({
   outfile: "main.js",
   minify: production,
   sourcemap: production ? false : "inline",
-  define: { __FLOWTASK_CSS__: JSON.stringify(css) },
 });
+
+await copyFile("src/styles.css", "styles.css");
