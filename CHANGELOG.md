@@ -6,6 +6,12 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.3
+
+- Removed the deprecated imperative Settings `display()` implementation.
+- Removed the redundant Settings heading.
+- Removed the unused `BridgeSettings` import.
+
 ## 0.1.2
 
 - Removed the plugin name from the Settings heading.
