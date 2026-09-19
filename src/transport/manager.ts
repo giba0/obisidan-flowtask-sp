@@ -93,6 +93,7 @@ export class TransportManager {
   async refresh(source: "active" | "archived" | "all" = "active", includeDone = false): Promise<FlowTask[]> { return this.listTasks(source, includeDone); }
 
   private async resolveCreateInput(input: CreateTaskInput): Promise<CreateTaskInput> {
+    if (input.parentId) return { ...input, projectId: undefined, tagIds: undefined, projectName: undefined, tagNames: undefined };
     const [projects, tags] = await Promise.all([this.listProjects(), this.listTags()]);
     const projectName = input.projectName || this.settings.defaultProjectName || undefined;
     const project = projectName ? projects.find((item) => item.name.toLocaleLowerCase() === projectName.toLocaleLowerCase()) : undefined;

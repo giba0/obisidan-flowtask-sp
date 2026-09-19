@@ -2,6 +2,12 @@ export async function requestUrl(): Promise<never> {
   throw new Error("requestUrl must be injected by the test");
 }
 
+export class Notice {
+  constructor(_message: string) {}
+}
+
+export class TFile {}
+
 export type RequestUrlParam = {
   url: string;
   method?: string;

@@ -31,6 +31,7 @@ export interface TagRef {
 
 export interface CreateTaskInput {
   title: string;
+  parentId?: string;
   projectId?: string;
   projectName?: string;
   tagIds?: string[];

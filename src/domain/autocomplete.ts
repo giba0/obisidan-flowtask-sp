@@ -6,6 +6,7 @@ export interface Suggestion {
   kind: SuggestionKind;
   label: string;
   value: string;
+  id?: string;
 }
 
 export function activeToken(value: string, cursor: number): string {

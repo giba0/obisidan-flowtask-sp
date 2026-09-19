@@ -15,12 +15,13 @@ export class TaskView extends ItemView {
   private currentTaskId?: string;
   private readonly collapsedGroups = new Set<string>();
   private readonly collapsedTasks = new Set<string>();
+  private readonly initializedSubtaskGroups = new Set<string>();
   private projectOrder: string[];
 
   constructor(
     leaf: WorkspaceLeaf,
     private readonly transport: TransportManager,
-    private readonly openQuickCapture: () => void,
+    private readonly openQuickCapture: (parentId?: string) => void,
     private readonly onTasksLoaded?: (tasks: FlowTask[]) => Promise<void>,
     projectOrder: string[] = [],
     private readonly onProjectOrderChange?: (projectOrder: string[]) => Promise<void>,
@@ -35,6 +36,10 @@ export class TaskView extends ItemView {
   async refresh(): Promise<void> {
     // Fetch completed tasks for remote checkbox sync; visibility remains a local filter.
     this.tasks = await this.transport.refresh(this.filters.scope === "archived" ? "archived" : "active", true);
+    this.tasks.filter((task) => !task.parentId).forEach((task) => {
+      if (!this.initializedSubtaskGroups.has(task.id)) this.collapsedTasks.add(task.id);
+      this.initializedSubtaskGroups.add(task.id);
+    });
     this.currentTaskId = (await this.transport.currentTask())?.id;
     if (this.onTasksLoaded) await this.onTasksLoaded(this.tasks);
     this.renderTasks();
@@ -162,13 +167,27 @@ export class TaskView extends ItemView {
     const roots = tasks.filter((task) => !task.parentId || !taskIds.has(task.parentId));
     const visit = (task: FlowTask, depth: number): void => {
       const taskChildren = children.get(task.id) ?? [];
-      this.renderTask(parent, task, depth, taskChildren.length > 0);
-      if (!this.collapsedTasks.has(task.id)) taskChildren.forEach((child) => visit(child, depth + 1));
+      this.renderTask(parent, task, depth);
+      if (depth === 0) {
+        const subtaskSection = parent.createDiv({ cls: "flowtask-subtasks" });
+        const subtaskHeader = subtaskSection.createEl("button", { cls: "flowtask-subtasks-header", attr: { "aria-expanded": String(!this.collapsedTasks.has(task.id)) } });
+        subtaskHeader.createSpan({ cls: "flowtask-subtasks-icon", text: "☷" });
+        subtaskHeader.createSpan({ text: `Subtasks (${taskChildren.length})` });
+        subtaskHeader.createSpan({ cls: "flowtask-subtasks-chevron", text: this.collapsedTasks.has(task.id) ? "▸" : "▴" });
+        subtaskHeader.addEventListener("click", () => { if (this.collapsedTasks.has(task.id)) this.collapsedTasks.delete(task.id); else this.collapsedTasks.add(task.id); this.renderTasks(); });
+        if (!this.collapsedTasks.has(task.id)) {
+          taskChildren.forEach((child) => visit(child, depth + 1));
+          const addSubtask = subtaskSection.createEl("button", { cls: "flowtask-add-subtask", text: "+  Add subtask" });
+          addSubtask.addEventListener("click", () => this.openQuickCapture(task.id));
+        }
+      } else if (!this.collapsedTasks.has(task.id)) {
+        taskChildren.forEach((child) => visit(child, depth + 1));
+      }
     };
     roots.forEach((task) => visit(task, 0));
   }
 
-  private renderTask(parent: HTMLElement, task: FlowTask, depth = 0, hasChildren = false): void {
+  private renderTask(parent: HTMLElement, task: FlowTask, depth = 0): void {
     const card = parent.createDiv({ cls: "flowtask-card" });
     card.setCssProps({ "--flowtask-indent": `${depth * 16}px` });
     const check = card.createEl("input", { type: "checkbox" });
@@ -176,12 +195,7 @@ export class TaskView extends ItemView {
     check.addEventListener("change", () => void this.complete(task, check.checked));
     const body = card.createDiv();
     const titleRow = body.createDiv({ cls: "flowtask-title-row" });
-    if (hasChildren) {
-      const toggle = titleRow.createEl("button", { cls: "flowtask-subtask-toggle", text: this.collapsedTasks.has(task.id) ? "▸" : "▾", attr: { "aria-label": this.collapsedTasks.has(task.id) ? "Expand subtasks" : "Collapse subtasks" } });
-      toggle.addEventListener("click", () => { if (this.collapsedTasks.has(task.id)) this.collapsedTasks.delete(task.id); else this.collapsedTasks.add(task.id); this.renderTasks(); });
-    } else {
-      titleRow.createSpan({ cls: "flowtask-subtask-spacer" });
-    }
+    titleRow.createSpan({ cls: "flowtask-subtask-spacer" });
     titleRow.createDiv({ cls: "flowtask-title", text: task.title });
     const meta = body.createDiv({ cls: "flowtask-meta" });
     if (task.timeSpentMs > 0) meta.createSpan({ cls: "flowtask-badge is-invested", text: `↻ ${formatDuration(task.timeSpentMs)} invested` });

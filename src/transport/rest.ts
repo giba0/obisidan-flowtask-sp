@@ -40,8 +40,9 @@ export class RestTransport {
   async createTask(input: CreateTaskInput): Promise<FlowTask> {
     const response = await this.call("POST", "/tasks", {
       title: input.title,
-      projectId: input.projectId,
-      tagIds: input.tagIds,
+      parentId: input.parentId,
+      projectId: input.parentId ? undefined : input.projectId,
+      tagIds: input.parentId ? undefined : input.tagIds,
       dueDay: input.dueDate,
       timeEstimate: input.estimateMinutes ? input.estimateMinutes * 60 * 1000 : undefined,
       notes: input.notes,

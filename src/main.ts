@@ -21,7 +21,7 @@ export default class FlowTaskPlugin extends Plugin {
     this.registerView(FLOWTASK_VIEW_TYPE, (leaf) => new TaskView(
       leaf,
       this.transport,
-      () => new QuickCaptureModal(this.app, this.transport).open(),
+      (parentId) => new QuickCaptureModal(this.app, this.transport, parentId).open(),
       (tasks) => this.watcher.syncRemoteCompletions(tasks),
       this.settings.projectOrder,
       async (projectOrder) => { this.settings.projectOrder = projectOrder; await this.saveSettings(); },

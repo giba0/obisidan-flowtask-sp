@@ -156,6 +156,18 @@ The marker is hidden in Live Preview and Reading View and remains visible in Sou
 - Reopening the task in Super Productivity unchecks the linked note checkbox.
 - Remote completion synchronization runs during polling even when the FlowTask panel is closed.
 
+### Subtasks from notes
+
+Indented checkboxes under an imported parent are created as Super Productivity subtasks:
+
+```markdown
+- [ ] Release FlowTask #sp 📅 2026-09-25
+  - [ ] Update the README
+  - [ ] Publish the release
+```
+
+The parent needs the configured import tag. Its indented children inherit the parent relationship and project. Super Productivity's Local REST API currently supports one subtask level through `parentId`; deeper indentation is attached to the top-level parent rather than creating unsupported nested API relationships.
+
 <p align="center">
   <img src="assets/screenshots/side-by-side.png" alt="Obsidian and FlowTask side by side" width="900" />
   <br />
@@ -191,9 +203,10 @@ The modal provides:
 - Project autocomplete after `+`.
 - Tag autocomplete after `#`.
 - Date suggestions after `@`.
-- Keyboard navigation with Up, Down, and Enter.
+- Keyboard navigation with Up, Down, and Tab to select; Enter submits the capture.
 - A live preview showing the resolved date and estimate.
 - An option to attach an `obsidian://` link to the current note.
+- A collapsed **Subtasks** section with `+ Add subtask` for creating child tasks before the parent is submitted.
 
 <p align="center">
   <img src="assets/screenshots/quick-capture.png" alt="FlowTask Quick Capture" width="760" />
@@ -263,6 +276,8 @@ Each card can show:
 - Delete action.
 
 Tasks with subtasks display a `▾` or `▸` control beside the title. The control collapses or expands the child tasks without hiding the parent.
+
+Parent cards and Quick Capture both use a dedicated **Subtasks (n)** section with an **Add subtask** action, following the Super Productivity workflow.
 
 ## Tracking tasks
 

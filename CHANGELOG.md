@@ -6,6 +6,16 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.6
+
+- Added SP-style Subtasks sections to the panel and Quick Capture.
+- Added `+ Add subtask` actions and parent-first child creation through `parentId`.
+- Added project, tag, and date autocomplete to subtask inputs.
+- Changed autocomplete selection to Tab, with Enter reserved for submission.
+- Prevented partial task creation while a note line is still being edited.
+- Improved parent completion cascade synchronization to note subtasks.
+- Unified autocomplete styling and prevented modal clipping near the bottom edge.
+
 ## 0.1.5
 
 - Reduced Quick Capture autocomplete width and height.

@@ -34,4 +34,14 @@ describe("Super Productivity task fields", () => {
       "POST http://127.0.0.1:3876/task-control/stop",
     ]);
   });
+
+  it("creates a subtask with parentId and omits inherited project and tags", async () => {
+    let request!: RequestUrlParam;
+    const transport = new RestTransport("http://127.0.0.1:3876", "token", { request: async (value) => { request = value; return response({ ok: true, data: { id: "child", title: "Child" } }); } });
+    await transport.createTask({ title: "Child", parentId: "parent-1", projectId: "project-1", tagIds: ["tag-1"] });
+    const body = JSON.parse(String(request.body ?? "{}")) as Record<string, unknown>;
+    expect(body).toMatchObject({ title: "Child", parentId: "parent-1" });
+    expect(body).not.toHaveProperty("projectId");
+    expect(body).not.toHaveProperty("tagIds");
+  });
 });

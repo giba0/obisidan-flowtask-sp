@@ -6,6 +6,7 @@ import { TransportManager } from "../transport/manager";
 
 export class QuickCaptureModal extends Modal {
   private input!: HTMLInputElement;
+  private captureField!: HTMLDivElement;
   private preview!: HTMLDivElement;
   private autocompleteEl!: HTMLDivElement;
   private suggestions: Suggestion[] = [];
@@ -13,17 +14,20 @@ export class QuickCaptureModal extends Modal {
   private attachLink = false;
   private projects: ProjectRef[] = [];
   private tags: TagRef[] = [];
+  private subtaskBody!: HTMLDivElement;
+  private subtaskInputs: HTMLInputElement[] = [];
 
-  constructor(app: App, private readonly transport: TransportManager) { super(app); }
+  constructor(app: App, private readonly transport: TransportManager, private readonly parentId?: string) { super(app); }
 
   override onOpen(): void {
     this.modalEl.addClass("flowtask-modal");
-    this.titleEl.setText("Quick capture");
+    this.titleEl.setText(this.parentId ? "Add subtask" : "Quick capture");
     const content = this.contentEl;
     content.empty();
-    this.input = content.createEl("input", { type: "text", placeholder: "Buy milk +Home #shopping @today 15m" });
+    this.captureField = content.createDiv({ cls: "flowtask-capture-field" });
+    this.input = this.captureField.createEl("input", { type: "text", placeholder: "Buy milk +Home #shopping @today 15m" });
     this.input.addClass("flowtask-capture-input");
-    this.autocompleteEl = content.createDiv({ cls: "flowtask-autocomplete" });
+    this.autocompleteEl = this.captureField.createDiv({ cls: "flowtask-autocomplete" });
     this.preview = content.createDiv({ cls: "flowtask-preview" });
     this.updatePreview();
     this.input.addEventListener("input", () => { this.updatePreview(); this.updateAutocomplete(); });
@@ -31,18 +35,51 @@ export class QuickCaptureModal extends Modal {
     this.input.addEventListener("blur", () => window.setTimeout(() => this.hideAutocomplete(), 120));
 
     new Setting(content).setName("Attach link to current note").setDesc("Adds an obsidian:// link to the task notes.").addToggle((toggle) => toggle.onChange((value) => { this.attachLink = value; }));
+    if (!this.parentId) this.renderSubtasks(content);
     const actions = content.createDiv({ cls: "modal-button-container" });
     const cancel = actions.createEl("button", { text: "Cancel" });
     cancel.addEventListener("click", () => this.close());
-    const submit = actions.createEl("button", { text: "Create task", cls: "mod-cta" });
+    const submit = actions.createEl("button", { text: this.parentId ? "Create subtask" : "Create task", cls: "mod-cta" });
     submit.addEventListener("click", () => void this.submit());
     void this.loadReferences().catch(() => this.hideAutocomplete());
     window.setTimeout(() => this.input.focus(), 20);
   }
 
   private async loadReferences(): Promise<void> {
-    [this.projects, this.tags] = await Promise.all([this.transport.listProjects(), this.transport.listTags()]);
+    const [projects, tags] = await Promise.all([this.transport.listProjects(), this.transport.listTags()]);
+    this.projects = projects;
+    this.tags = tags;
     this.updateAutocomplete();
+  }
+
+  private renderSubtasks(content: HTMLElement): void {
+    const section = content.createDiv({ cls: "flowtask-quick-subtasks" });
+    const header = section.createEl("button", { cls: "flowtask-quick-subtasks-header", attr: { type: "button", "aria-expanded": "false" } });
+    header.createSpan({ cls: "flowtask-quick-subtasks-icon", text: "☷" });
+    header.createSpan({ text: "Subtasks" });
+    header.createSpan({ cls: "flowtask-quick-subtasks-chevron", text: "▸" });
+    this.subtaskBody = section.createDiv({ cls: "flowtask-quick-subtasks-body is-hidden" });
+    const add = this.subtaskBody.createEl("button", { cls: "flowtask-add-subtask", text: "+  Add subtask", attr: { type: "button" } });
+    add.addEventListener("click", () => this.addSubtaskInput());
+    header.addEventListener("click", () => {
+      const expanded = header.getAttribute("aria-expanded") === "true";
+      header.setAttribute("aria-expanded", String(!expanded));
+      header.querySelector(".flowtask-quick-subtasks-chevron")?.setText(expanded ? "▸" : "▾");
+      this.subtaskBody.toggleClass("is-hidden", expanded);
+    });
+  }
+
+  private addSubtaskInput(): void {
+    const row = this.subtaskBody.createDiv({ cls: "flowtask-quick-subtask-row" });
+    const input = row.createEl("input", { type: "text", placeholder: "Subtask title" });
+    const autocomplete = row.createDiv({ cls: "flowtask-autocomplete flowtask-subtask-autocomplete is-hidden" });
+    const remove = row.createEl("button", { text: "×", attr: { type: "button", "aria-label": "Remove subtask" } });
+    this.bindSubtaskAutocomplete(input, autocomplete);
+    remove.addEventListener("click", () => { this.subtaskInputs = this.subtaskInputs.filter((item) => item !== input); row.remove(); this.updatePreview(); });
+    input.addEventListener("input", () => this.updatePreview());
+    input.addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); this.addSubtaskInput(); } });
+    this.subtaskInputs.push(input);
+    input.focus();
   }
 
   private updateAutocomplete(): void {
@@ -60,10 +97,48 @@ export class QuickCaptureModal extends Modal {
     });
   }
 
+  private bindSubtaskAutocomplete(input: HTMLInputElement, menu: HTMLDivElement): void {
+    let suggestions: Suggestion[] = [];
+    let highlighted = -1;
+    const render = (): void => {
+      suggestions = getSuggestions(input.value, input.selectionStart ?? input.value.length, this.projects, this.tags);
+      highlighted = -1;
+      menu.empty();
+      if (!suggestions.length) { menu.addClass("is-hidden"); return; }
+      menu.removeClass("is-hidden");
+      suggestions.forEach((suggestion, index) => {
+        const item = menu.createEl("button", { cls: "flowtask-suggestion", attr: { type: "button" } });
+        item.createSpan({ cls: "flowtask-suggestion-prefix", text: suggestion.kind === "project" ? "+" : suggestion.kind === "tag" ? "#" : "@" });
+        item.createSpan({ text: suggestion.label });
+        item.addEventListener("mousedown", (event) => { event.preventDefault(); choose(index); });
+      });
+    };
+    const highlight = (): void => menu.querySelectorAll(".flowtask-suggestion").forEach((item, index) => item.toggleClass("is-highlighted", index === highlighted));
+    const choose = (index: number): void => {
+      const suggestion = suggestions[index];
+      if (!suggestion) return;
+      const result = applySuggestion(input.value, input.selectionStart ?? input.value.length, suggestion);
+      input.value = result.value;
+      input.setSelectionRange(result.cursor, result.cursor);
+      render();
+      input.focus();
+      this.updatePreview();
+    };
+    input.addEventListener("input", render);
+    input.addEventListener("blur", () => window.setTimeout(() => menu.addClass("is-hidden"), 120));
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown" && suggestions.length) { event.preventDefault(); highlighted = (highlighted + 1) % suggestions.length; highlight(); }
+      else if (event.key === "ArrowUp" && suggestions.length) { event.preventDefault(); highlighted = (highlighted - 1 + suggestions.length) % suggestions.length; highlight(); }
+      else if (event.key === "Tab" && suggestions.length) { event.preventDefault(); choose(highlighted >= 0 ? highlighted : 0); }
+      else if (event.key === "Enter") { event.preventDefault(); if (input.value.trim()) this.addSubtaskInput(); }
+      else if (event.key === "Escape") menu.addClass("is-hidden");
+    });
+  }
+
   private handleAutocompleteKey(event: KeyboardEvent): void {
     if (event.key === "ArrowDown" && this.suggestions.length) { event.preventDefault(); this.highlightedSuggestion = (this.highlightedSuggestion + 1) % this.suggestions.length; this.highlightAutocomplete(); return; }
     if (event.key === "ArrowUp" && this.suggestions.length) { event.preventDefault(); this.highlightedSuggestion = (this.highlightedSuggestion - 1 + this.suggestions.length) % this.suggestions.length; this.highlightAutocomplete(); return; }
-    if (event.key === "Enter" && this.highlightedSuggestion >= 0) { event.preventDefault(); this.chooseSuggestion(this.highlightedSuggestion); return; }
+    if (event.key === "Tab" && this.suggestions.length) { event.preventDefault(); this.chooseSuggestion(this.highlightedSuggestion >= 0 ? this.highlightedSuggestion : 0); return; }
     if (event.key === "Escape") this.hideAutocomplete();
     if (event.key === "Enter") void this.submit();
   }
@@ -100,8 +175,14 @@ export class QuickCaptureModal extends Modal {
     if (!parsed.title) { new Notice("Enter a task title."); return; }
     const file = this.app.workspace.getActiveFile();
     const notes = this.attachLink && file ? `obsidian://open?vault=${encodeURIComponent(this.app.vault.getName())}&file=${encodeURIComponent(file.path)}` : undefined;
-    const task = await this.transport.createTask({ ...parsed, notes });
-    if (task) { new Notice("Task created in Super Productivity."); this.close(); }
+    const task = await this.transport.createTask({ ...parsed, parentId: this.parentId, notes });
+    if (task) {
+      const subtasks = this.subtaskInputs.map((input) => input.value.trim()).filter(Boolean);
+      let failedSubtasks = 0;
+      if (!this.parentId) for (const title of subtasks) if (!(await this.transport.createTask({ title, parentId: task.id }))) failedSubtasks += 1;
+      new Notice(failedSubtasks ? `Task created, but ${failedSubtasks} subtask(s) could not be created.` : this.parentId ? "Subtask created in Super Productivity." : "Task created in Super Productivity.");
+      this.close();
+    }
     else new Notice("The task could not be created.");
   }
 }

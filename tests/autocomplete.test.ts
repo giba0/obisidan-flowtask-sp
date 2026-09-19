@@ -15,4 +15,5 @@ describe("quick capture autocomplete", () => {
     expect(suggestions).toMatchObject([{ value: "@tomorrow" }]);
     expect(applySuggestion("Reunião @tom às 10h", 12, suggestions[0])).toMatchObject({ value: "Reunião @tomorrow às 10h", cursor: 17 });
   });
+
 });
