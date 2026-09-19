@@ -25,6 +25,7 @@ export class TaskView extends ItemView {
     private readonly onTasksLoaded?: (tasks: FlowTask[]) => Promise<void>,
     projectOrder: string[] = [],
     private readonly onProjectOrderChange?: (projectOrder: string[]) => Promise<void>,
+    private readonly useProjectStyles: () => boolean = () => true,
   ) { super(leaf); this.projectOrder = [...projectOrder]; }
   override getViewType(): string { return FLOWTASK_VIEW_TYPE; }
   override getDisplayText(): string { return "FlowTask"; }
@@ -122,6 +123,9 @@ export class TaskView extends ItemView {
       const group = this.listEl.createDiv({ cls: "flowtask-group" });
       const groupHeader = group.createEl("button", { cls: "flowtask-group-title", attr: { "aria-expanded": String(!this.collapsedGroups.has(groupName)) } });
       groupHeader.createSpan({ cls: "flowtask-project-drag-handle", text: "⋮⋮", attr: { title: "Drag to reorder projects" } });
+      const groupStyle = this.groupStyle(groupTasks[0], groupName);
+      if (groupStyle.color) { groupHeader.addClass("has-color"); groupHeader.setCssProps({ "--flowtask-group-color": groupStyle.color }); }
+      if (groupStyle.icon) { renderExternalIcon(groupHeader.createSpan({ cls: "flowtask-group-icon" }), groupStyle.icon); }
       groupHeader.createSpan({ cls: "flowtask-collapse-icon", text: this.collapsedGroups.has(groupName) ? "▸" : "▾" });
       groupHeader.createSpan({ text: groupName });
       groupHeader.draggable = true;
@@ -201,7 +205,13 @@ export class TaskView extends ItemView {
     if (task.timeSpentMs > 0) meta.createSpan({ cls: "flowtask-badge is-invested", text: `↻ ${formatDuration(task.timeSpentMs)} invested` });
     else if (task.estimateMinutes) meta.createSpan({ cls: "flowtask-badge", text: `~${formatDuration(task.estimateMinutes * 60 * 1000)}` });
     if (task.dueDate) meta.createSpan({ cls: "flowtask-badge", text: task.dueDate });
-    (task.tagNames ?? []).forEach((tag) => meta.createSpan({ cls: "flowtask-badge", text: `#${tag}` }));
+    (task.tagNames ?? []).forEach((tag) => {
+      const badge = meta.createSpan({ cls: "flowtask-badge" });
+      const style = task.tagStyles?.[tag];
+      if (this.useProjectStyles() && style?.color) { badge.addClass("has-color"); badge.setCssProps({ "--flowtask-tag-color": style.color }); }
+      if (this.useProjectStyles() && style?.icon) { renderExternalIcon(badge.createSpan({ cls: "flowtask-tag-icon" }), style.icon); }
+      badge.createSpan({ text: `#${tag}` });
+    });
     const actions = body.createDiv({ cls: "flowtask-actions" });
     const isCurrent = this.currentTaskId === task.id;
     const startLabel = isCurrent ? "■ Pause" : task.timeSpentMs > 0 ? `↻ Resume (${formatDuration(task.timeSpentMs)})` : "▶ Start";
@@ -221,4 +231,16 @@ export class TaskView extends ItemView {
     if (this.filters.groupBy === "date") return task.dueDate || "No date";
     return task.projectName || "No project";
   }
+
+  private groupStyle(task: FlowTask | undefined, groupName: string): { color?: string; icon?: string } {
+    if (!task || !this.useProjectStyles()) return {};
+    if (this.filters.groupBy === "tag") return task.tagStyles?.[groupName] ?? {};
+    return { color: task.projectColor, icon: task.projectIcon };
+  }
+}
+
+function renderExternalIcon(container: HTMLElement, icon: string): void {
+  // Super Productivity stores both Lucide names and emoji icons.
+  if (/[^\u0000-\u007f]/u.test(icon) || icon.length <= 2) container.setText(icon);
+  else setIcon(container, icon);
 }

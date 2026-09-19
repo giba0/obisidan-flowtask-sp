@@ -6,6 +6,13 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.7
+
+- Added Super Productivity project colors and icons to the panel.
+- Added tag colors and icons to task badges.
+- Added a setting to enable or disable Super Productivity visual styling.
+- Improved contrast by keeping task and group text theme-readable.
+
 ## 0.1.6
 
 - Added SP-style Subtasks sections to the panel and Quick Capture.

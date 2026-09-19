@@ -26,6 +26,8 @@
 .flowtask-group { margin: 9px 0 14px; }
 .flowtask-group-title { display: flex; align-items: center; justify-content: flex-start; gap: 5px; width: 100%; border: 0; background: transparent; padding: 0 8px 6px; color: var(--text-muted); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-align: left; text-transform: uppercase; cursor: pointer; }
 .flowtask-group-title:hover { color: var(--text-normal); }
+.flowtask-group-title.has-color { border-left: 4px solid var(--flowtask-group-color); padding-left: 5px; }
+.flowtask-group-icon { display: inline-flex; width: 16px; height: 16px; align-items: center; justify-content: center; color: var(--flowtask-group-color); }
 .flowtask-collapse-icon { width: 10px; color: var(--text-faint); font-size: 12px; }
 .flowtask-project-drag-handle { margin-right: 3px; color: var(--text-faint); cursor: grab; letter-spacing: -2px; }
 .flowtask-group-title.is-dragging { opacity: .45; }
@@ -43,6 +45,8 @@
 .flowtask-add-subtask:hover { color: var(--text-accent); }
 .flowtask-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; color: var(--text-muted); font-size: 10px; }
 .flowtask-badge { display: inline-flex; align-items: center; gap: 3px; border-radius: 4px; padding: 2px 5px; background: var(--background-secondary); }
+.flowtask-badge.has-color { color: var(--flowtask-tag-color); border: 1px solid color-mix(in srgb, var(--flowtask-tag-color) 45%, transparent); }
+.flowtask-tag-icon { display: inline-flex; width: 12px; height: 12px; align-items: center; justify-content: center; }
 .flowtask-badge.is-invested { color: var(--text-accent); background: var(--background-modifier-form-field); }
 .flowtask-actions { display: flex; gap: 4px; margin-top: 7px; opacity: .75; }
 .flowtask-card:hover .flowtask-actions { opacity: 1; }

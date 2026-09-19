@@ -25,6 +25,7 @@ export default class FlowTaskPlugin extends Plugin {
       (tasks) => this.watcher.syncRemoteCompletions(tasks),
       this.settings.projectOrder,
       async (projectOrder) => { this.settings.projectOrder = projectOrder; await this.saveSettings(); },
+      () => this.settings.useProjectStyles,
     ));
     this.addSettingTab(new FlowTaskSettingTab(this.app, this));
     this.addRibbonIcon("check-check", "Open FlowTask", () => void this.openPanel());
@@ -36,7 +37,7 @@ export default class FlowTaskPlugin extends Plugin {
 
   override onunload(): void {}
 
-  async saveSettings(): Promise<void> { await this.saveData(this.settings); this.transport.configure(); this.watcher?.configure(this.settings.importTag); }
+  async saveSettings(): Promise<void> { await this.saveData(this.settings); this.transport.configure(); this.watcher?.configure(this.settings.importTag); void this.refreshPanel(); }
 
   restartPolling(): void {
     if (this.pollingId) window.clearInterval(this.pollingId);

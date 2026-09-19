@@ -122,10 +122,18 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function toRefList(payload: unknown): Array<{ id: string; name: string }> {
+function toRefList(payload: unknown): Array<{ id: string; name: string; color?: string; icon?: string }> {
   payload = unwrapResponse(payload);
   const values = Array.isArray(payload) ? payload : isRecord(payload) && Array.isArray(payload.items) ? payload.items : [];
-  return values.filter(isRecord).map((value) => ({ id: String(value.id ?? value.uid ?? value.name), name: String(value.name ?? value.title ?? value.id) }));
+  return values.filter(isRecord).map((value) => {
+    const theme = isRecord(value.theme) ? value.theme : undefined;
+    return {
+      id: String(value.id ?? value.uid ?? value.name),
+      name: String(value.name ?? value.title ?? value.id),
+      color: typeof value.color === "string" ? value.color : typeof theme?.primary === "string" ? theme.primary : undefined,
+      icon: typeof value.icon === "string" ? value.icon : undefined,
+    };
+  });
 }
 
 function normalizeTask(value: unknown): FlowTask {
@@ -140,6 +148,8 @@ function normalizeTask(value: unknown): FlowTask {
     status: task.isArchived || task.status === "ARCHIVED" ? "archived" : task.isDone || task.status === "DONE" || task.completed ? "done" : "open",
     projectId: task.projectId ? String(task.projectId) : project?.id ? String(project.id) : undefined,
     projectName: task.projectName ? String(task.projectName) : project?.name ? String(project.name) : undefined,
+    projectColor: project?.theme && isRecord(project.theme) && typeof project.theme.primary === "string" ? project.theme.primary : undefined,
+    projectIcon: typeof project?.icon === "string" ? project.icon : undefined,
     tagIds: Array.isArray(task.tagIds) ? task.tagIds.map((id) => String(id)) : tags.map((tag) => String(tag.id)).filter(Boolean),
     tagNames: tags.map((tag) => String(tag.name ?? tag.title)).filter(Boolean),
     dueDate: task.dueDay ? String(task.dueDay) : typeof task.dueWithTime === "number" ? new Date(task.dueWithTime).toISOString() : task.dueDate ? String(task.dueDate) : task.plannedAt ? String(task.plannedAt) : undefined,
