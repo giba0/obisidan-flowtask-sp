@@ -6,8 +6,11 @@ export interface FlowTask {
   status: TaskStatus;
   projectId?: string;
   projectName?: string;
+  projectColor?: string;
+  projectIcon?: string;
   tagIds?: string[];
   tagNames?: string[];
+  tagStyles?: Record<string, { color?: string; icon?: string }>;
   dueDate?: string;
   plannedAt?: string;
   estimateMinutes?: number;
@@ -22,11 +25,15 @@ export interface FlowTask {
 export interface ProjectRef {
   id: string;
   name: string;
+  color?: string;
+  icon?: string;
 }
 
 export interface TagRef {
   id: string;
   name: string;
+  color?: string;
+  icon?: string;
 }
 
 export interface CreateTaskInput {
@@ -60,6 +67,7 @@ export interface BridgeSettings {
   defaultTagName: string;
   projectOrder: string[];
   importTag: string;
+  useProjectStyles: boolean;
 }
 
 export const DEFAULT_SETTINGS: BridgeSettings = {
@@ -72,6 +80,7 @@ export const DEFAULT_SETTINGS: BridgeSettings = {
   defaultTagName: "",
   projectOrder: [],
   importTag: "sp",
+  useProjectStyles: true,
 };
 
 export interface ParsedTaskLine {

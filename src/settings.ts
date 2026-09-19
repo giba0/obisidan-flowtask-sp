@@ -38,6 +38,13 @@ export class FlowTaskSettingTab extends PluginSettingTab {
           { name: "Fallback folder", desc: "A folder relative to the vault root, suitable for sync.", control: { type: "text", key: "fallbackFolder", defaultValue: "FlowTask" } },
         ],
       },
+      {
+        type: "group",
+        heading: "Appearance",
+        items: [
+          { name: "Use Super Productivity colors and icons", desc: "Apply project and tag colors and icons from Super Productivity.", control: { type: "toggle", key: "useProjectStyles", defaultValue: true } },
+        ],
+      },
     ];
   }
 

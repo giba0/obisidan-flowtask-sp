@@ -7,7 +7,7 @@ const task: FlowTask = { id: "1", title: "Revisar PR", status: "open", projectId
 
 describe("task presentation", () => {
   it("resolves project and tag names from the SP reference lists", () => {
-    expect(enrichTaskReferences(task, [{ id: "p1", name: "Trabalho" }], [{ id: "t1", name: "urgente" }])).toMatchObject({ projectName: "Trabalho", tagNames: ["urgente"] });
+    expect(enrichTaskReferences(task, [{ id: "p1", name: "Trabalho", color: "#7c3aed", icon: "folder" }], [{ id: "t1", name: "urgente", color: "#ef4444", icon: "alert-circle" }])).toMatchObject({ projectName: "Trabalho", projectColor: "#7c3aed", projectIcon: "folder", tagNames: ["urgente"], tagStyles: { urgente: { color: "#ef4444", icon: "alert-circle" } } });
   });
 
   it("matches fuzzy search terms", () => {
