@@ -1,4 +1,4 @@
-import { Notice, PluginSettingTab, Setting, type App, type SettingDefinitionItem } from "obsidian";
+import { Notice, PluginSettingTab, type App, type SettingDefinitionItem } from "obsidian";
 import type FlowTaskPlugin from "./main";
 
 export class FlowTaskSettingTab extends PluginSettingTab {

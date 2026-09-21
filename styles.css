@@ -38,10 +38,10 @@
 .flowtask-title-row { display: flex; align-items: flex-start; gap: 4px; }
 .flowtask-subtask-spacer { flex: 0 0 14px; width: 14px; color: var(--text-muted); }
 .flowtask-subtasks { margin: 0 8px 10px 18px; border: 1px solid var(--background-modifier-border); border-radius: 8px; padding: 8px; background: var(--background-secondary); }
-.flowtask-subtasks-header { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 0; border: 0; background: transparent !important; box-shadow: none; color: var(--text-normal); padding: 4px 6px 8px; text-align: left !important; cursor: pointer; font-size: 12px; }
+.flowtask-panel .flowtask-subtasks-header { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 0; border: 0; background: transparent; box-shadow: none; color: var(--text-normal); padding: 4px 6px 8px; text-align: left; cursor: pointer; font-size: 12px; }
 .flowtask-subtasks-icon { color: var(--text-muted); font-size: 15px; }
 .flowtask-subtasks-chevron { margin-left: auto; color: var(--text-muted); }
-.flowtask-add-subtask { display: block; width: 100%; min-height: 0; border: 0; background: transparent !important; box-shadow: none; color: var(--text-normal); padding: 10px 6px 4px; text-align: center; cursor: pointer; font-size: 12px; }
+.flowtask-panel .flowtask-add-subtask { display: block; width: 100%; min-height: 0; border: 0; background: transparent; box-shadow: none; color: var(--text-normal); padding: 10px 6px 4px; text-align: center; cursor: pointer; font-size: 12px; }
 .flowtask-add-subtask:hover { color: var(--text-accent); }
 .flowtask-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; color: var(--text-muted); font-size: 10px; }
 .flowtask-badge { display: inline-flex; align-items: center; gap: 3px; border-radius: 4px; padding: 2px 5px; background: var(--background-secondary); }
@@ -65,11 +65,11 @@
 .flowtask-capture-field { position: relative; }
 .flowtask-autocomplete { position: absolute; z-index: 2; top: calc(100% + 5px); left: 0; display: flex; flex-direction: column; width: min(300px, 100%); max-height: 184px; padding: 4px; border: 1px solid var(--background-modifier-border); border-radius: 8px; background: var(--background-primary); box-shadow: 0 8px 24px rgb(0 0 0 / 14%); overflow: auto; }
 .flowtask-autocomplete.is-hidden { display: none; }
-.flowtask-suggestion { display: flex; align-items: center; justify-content: flex-start !important; gap: 8px; width: 100%; height: 32px; min-height: 32px; flex: 0 0 32px; border: 0; border-radius: 5px; background: transparent; color: var(--text-normal); padding: 5px 8px; text-align: left !important; cursor: pointer; font-size: 13px !important; line-height: 18px; }
+.flowtask-modal .flowtask-suggestion { display: flex; align-items: center; justify-content: flex-start; gap: 8px; width: 100%; height: 32px; min-height: 32px; flex: 0 0 32px; border: 0; border-radius: 5px; background: transparent; color: var(--text-normal); padding: 5px 8px; text-align: left; cursor: pointer; font-size: 13px; line-height: 18px; }
 .flowtask-suggestion:hover, .flowtask-suggestion.is-highlighted { background: var(--background-modifier-hover); }
-.flowtask-suggestion-prefix { flex: 0 0 16px; color: var(--text-accent); font-size: 13px !important; font-weight: 600; line-height: 18px; text-align: center; }
+.flowtask-modal .flowtask-suggestion-prefix { flex: 0 0 16px; color: var(--text-accent); font-size: 13px; font-weight: 600; line-height: 18px; text-align: center; }
 .flowtask-quick-subtasks { margin: 8px 0 14px; border-top: 1px solid var(--background-modifier-border); border-bottom: 1px solid var(--background-modifier-border); padding: 8px 0; }
-.flowtask-quick-subtasks-header { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 0; border: 0; background: transparent !important; box-shadow: none; color: var(--text-normal); padding: 6px 0; text-align: left !important; cursor: pointer; font-size: 13px; }
+.flowtask-modal .flowtask-quick-subtasks-header { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 0; border: 0; background: transparent; box-shadow: none; color: var(--text-normal); padding: 6px 0; text-align: left; cursor: pointer; font-size: 13px; }
 .flowtask-quick-subtasks-icon { color: var(--text-muted); font-size: 15px; }
 .flowtask-quick-subtasks-chevron { margin-left: auto; color: var(--text-muted); }
 .flowtask-quick-subtasks-body { padding-top: 6px; }

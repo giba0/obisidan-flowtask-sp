@@ -241,6 +241,6 @@ export class TaskView extends ItemView {
 
 function renderExternalIcon(container: HTMLElement, icon: string): void {
   // Super Productivity stores both Lucide names and emoji icons.
-  if (/[^\u0000-\u007f]/u.test(icon) || icon.length <= 2) container.setText(icon);
+  if (Array.from(icon).some((character) => (character.codePointAt(0) ?? 0) > 127) || icon.length <= 2) container.setText(icon);
   else setIcon(container, icon);
 }
