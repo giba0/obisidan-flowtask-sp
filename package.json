@@ -1,6 +1,6 @@
 {
   "name": "flowtask-for-super-productivity",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "description": "Obsidian bridge for Super Productivity",
   "main": "main.js",

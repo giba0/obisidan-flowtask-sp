@@ -6,6 +6,12 @@ All notable changes to FlowTask For Super Productivity are documented here.
 
 - Future changes.
 
+## 0.1.8
+
+- Fixed Obsidian review warnings for icon parsing and CSS specificity.
+- Removed the remaining unused Settings import.
+- Preserved theme-readable styling without `!important` overrides.
+
 ## 0.1.7
 
 - Added Super Productivity project colors and icons to the panel.
